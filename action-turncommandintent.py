@@ -8,7 +8,7 @@ from hermes_python.ontology import *
 import requests
 import socketio
 sio = socketio.Client()
-sio.connect('http://localhost')
+sio.connect('http://192.168.0.104')
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
         return {section: {option_name: option for option_name, option in self.items(section)} for section in self.sections()}

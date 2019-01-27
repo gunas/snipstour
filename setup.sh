@@ -18,4 +18,4 @@ fi
 . $VENV/bin/activate
 
 python2 -m pip install -r requirements.txt
-chmod +x /var/lib/snips/skills/snips-tour/action-turncommandintent.py
+chmod +x /var/lib/snips/skills/snipstour/action-turncommandintent.py
