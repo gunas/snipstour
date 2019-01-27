@@ -7,7 +7,7 @@ from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import requests
 from socketIO_client import SocketIO
-
+socketIO = SocketIO('ec2-13-229-65-9.ap-southeast-1.compute.amazonaws.com', 80)
 
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
@@ -40,9 +40,8 @@ def subscribe_intent_turncommand(hermes, intent_message):
      conf = read_configuration_file('config.ini')
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
-         socketIO = SocketIO('ec2-13-229-65-9.ap-southeast-1.compute.amazonaws.com', 80)
          socketIO.emit('rotation_command', turn_command)
-         socketIO.wait(seconds=1)
+         #socketIO.wait(seconds=1)
          hermes.publish_end_session(intent_message.session_id, 'Ok, Moving ' + turn_command)
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
