@@ -1,3 +1,3 @@
 hermes-python==0.1.19
 requests==2.20.0
-socketIO-client-2
+socketIO-client-2==0.7.5
