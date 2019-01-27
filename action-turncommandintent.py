@@ -13,7 +13,7 @@ class RotationNamespace(BaseNamespace):
         print('on_aaa_response', args)
 
 socketIO = SocketIO('192.168.0.104', 80)
-rotation_namespace = socketIO.define(ChatNamespace, '/rotation_command')
+rotation_namespace = socketIO.define(RotationNamespace, '/rotation_command')
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
         return {section: {option_name: option for option_name, option in self.items(section)} for section in self.sections()}
