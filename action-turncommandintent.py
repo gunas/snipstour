@@ -8,7 +8,7 @@ from hermes_python.ontology import *
 import requests
 from socketIO_client import SocketIO
 socketIO = SocketIO('localhost', 80)
-socketIO.wait(seconds=5)
+
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
         return {section: {option_name: option for option_name, option in self.items(section)} for section in self.sections()}
@@ -40,7 +40,9 @@ def subscribe_intent_turncommand(hermes, intent_message):
      conf = read_configuration_file('config.ini')
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
+        
          socketIO.emit('rotation_command', turn_command)
+         socketIO.wait(seconds=1)
          hermes.publish_end_session(intent_message.session_id, 'Ok, Moving ' + turn_command)
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
