@@ -6,9 +6,9 @@ import io
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import requests
-#import socketio
-#sio = socketio.Client()
-#sio.connect('http://192.168.0.104')
+import socketio
+sio = socketio.Client()
+sio.connect('http://192.168.0.104')
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
         return {section: {option_name: option for option_name, option in self.items(section)} for section in self.sections()}
@@ -40,7 +40,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
      conf = read_configuration_file('config.ini')
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
-         #sio.emit('rotation_command', turn_command)
+         sio.emit('rotation_command', turn_command)
          hermes.publish_end_session(intent_message.session_id, 'Ok, Moving ' + turn_command)
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
