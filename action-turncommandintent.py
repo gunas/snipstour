@@ -40,7 +40,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
      conf = read_configuration_file('config.ini')
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
-         sio.emit('turn_command_from_user', turn_command)
+         sio.emit('rotation_command', turn_command)
          hermes.publish_end_session(intent_message.session_id, 'Ok, Moving ' + turn_command)
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
