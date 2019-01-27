@@ -43,7 +43,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
          socketIO.emit('rotation_command', turn_command)
          socketIO.emit('rotation_command', turn_command)
          #socketIO.wait(seconds=1)
-         hermes.publish_end_session(intent_message.session_id, 'Ok, Moving ' + turn_command)
+         hermes.publish_end_session(intent_message.session_id, 'Ok, Turning ' + turn_command)
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
@@ -60,7 +60,7 @@ def subscribe_intent_movecommand(hermes, intent_message):
 if __name__ == "__main__":
     with Hermes('localhost:1883') as h:
         h.subscribe_intent('gunasekartr:turncommandintent', subscribe_intent_turncommand) \
-            subscribe_intent('gunasekartr:movecommandintent', subscribe_intent_movecommand) \
+            .subscribe_intent('gunasekartr:movecommandintent', subscribe_intent_movecommand) \
             .subscribe_session_ended(session_ended) \
             .subscribe_session_started(session_started) \
             .start()
