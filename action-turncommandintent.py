@@ -41,6 +41,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
          socketIO.emit('rotation_command', turn_command)
+         socketIO.emit('rotation_command', turn_command)
          #socketIO.wait(seconds=1)
          hermes.publish_end_session(intent_message.session_id, 'Ok, Moving ' + turn_command)
      else:
