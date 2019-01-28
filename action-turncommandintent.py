@@ -8,7 +8,7 @@ from hermes_python.ontology import *
 import requests
 from socketIO_client import SocketIO
 socketIO = SocketIO('localhost', 80)
-
+lastcommand = ''
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
         return {section: {option_name: option for option_name, option in self.items(section)} for section in self.sections()}
@@ -40,7 +40,8 @@ def subscribe_intent_turncommand(hermes, intent_message):
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
          socketIO.emit('rotation_command', turn_command)
-         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent']);
+         lastcommand = 'rotation_command@'+ turn_command
+         hermes.publish_continue_session(intent_message.session_id, 'Turing '+ turn_command + ', Would you like to do that again?', ['gunasekartr:continueintent']);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
@@ -48,7 +49,8 @@ def subscribe_intent_movecommand(hermes, intent_message):
      if len(intent_message.slots.MOVE_COMMAND_SLOT) > 0:
          move_command = intent_message.slots.MOVE_COMMAND_SLOT.first().value
          socketIO.emit('move_command', move_command)
-         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent'], '{"customData": "move_command@RIGHT"}');
+         lastcommand = 'move_command@'+ move_command
+         hermes.publish_continue_session(intent_message.session_id, 'Moving ' + move_command + ', Would you like to do that again?', ['gunasekartr:continueintent']);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
@@ -56,10 +58,9 @@ def subscribe_intent_continue(hermes, intent_message):
      if len(intent_message.slots.YES_NO_SLOT) > 0:
          continue_answer = intent_message.slots.YES_NO_SLOT.first().value
          if continue_answer == 'yes':
-             print(intent_message.custom_data.split("@"))
-             last_command, action = str(intent_message.custom_data.split("@"))
-             socketIO.emit(last_command, action)
-             hermes.publish_continue_session(intent_message.session_id, 'Ok, Would you like to do the move again?', ['gunasekartr:continueintent'], intent_message.custom_data);
+             last_intent_command, action = lastcommand.split("@")
+             socketIO.emit(last_intent_command, action)
+             hermes.publish_continue_session(intent_message.session_id, 'Ok, Would you like to do the move again?', ['gunasekartr:continueintent']);
          else:
              hermes.publish_end_session(intent_message.session_id, "That's fine");     
      else:
