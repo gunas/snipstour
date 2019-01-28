@@ -7,7 +7,7 @@ from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import requests
 from socketIO_client import SocketIO
-socketIO = SocketIO('ec2-3-0-55-223.ap-southeast-1.compute.amazonaws.com', 80)
+socketIO = SocketIO('localhost', 80)
 
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
