@@ -42,7 +42,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
          socketIO.emit('rotation_command', turn_command)
          lastcommand = 'rotation_command@'+ turn_command
          requests.get('http://localhost/sstore?lastcommand='+ lastcommand + '&sid=' + intent_message.session_id)
-         hermes.publish_continue_session(intent_message.session_id, 'Turing '+ turn_command + ', Would you like to do that again?', ['gunasekartr:continueintent']);
+         hermes.publish_continue_session(intent_message.session_id, 'Turing '+ turn_command + ', Would you like to turn again?', ['gunasekartr:continueintent']);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
@@ -52,7 +52,7 @@ def subscribe_intent_movecommand(hermes, intent_message):
          socketIO.emit('move_command', move_command)
          lastcommand = 'move_command@'+ move_command
          requests.get('http://localhost/sstore?lastcommand='+ lastcommand + '&sid=' + intent_message.session_id)
-         hermes.publish_continue_session(intent_message.session_id, 'Moving ' + move_command + ', Would you like to do that again?', ['gunasekartr:continueintent']);
+         hermes.publish_continue_session(intent_message.session_id, 'Moving ' + move_command + ', Would you like to move again?', ['gunasekartr:continueintent']);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
@@ -61,16 +61,13 @@ def subscribe_intent_continue(hermes, intent_message):
          continue_answer = intent_message.slots.YES_NO_SLOT.first().value
          if continue_answer == 'yes':
              lastcommand = requests.get('http://localhost/lastcommand?sid=' + intent_message.session_id)
-             print(lastcommand)
-             print(lastcommand.raw)
-             print('lastcom:' + lastcommand.text)
              last_intent_command, action = lastcommand.text.split("@")
              socketIO.emit(last_intent_command, action)
-             hermes.publish_continue_session(intent_message.session_id, 'Ok, Would you like to do the move again?', ['gunasekartr:continueintent']);
+             hermes.publish_continue_session(intent_message.session_id, 'Ok, Would you like to repeat?', ['gunasekartr:continueintent']);
          else:
-             hermes.publish_end_session(intent_message.session_id, "That's fine");     
+             hermes.publish_end_session(intent_message.session_id, "That's fine.");     
      else:
-         hermes.publish_end_session(intent_message.session_id, "Would you like to do the move again?")
+         hermes.publish_end_session(intent_message.session_id, "Would you like to repeat?")
 
 if __name__ == "__main__":
     with Hermes('localhost:1883') as h:
