@@ -41,6 +41,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
          socketIO.emit('rotation_command', turn_command)
          lastcommand = 'rotation_command@'+ turn_command
+         requests.get('http://localhost/sstore?lastcommand='+ lastcommand + '&sid=' + intent_message.session_id)
          hermes.publish_continue_session(intent_message.session_id, 'Turing '+ turn_command + ', Would you like to do that again?', ['gunasekartr:continueintent']);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
@@ -50,6 +51,7 @@ def subscribe_intent_movecommand(hermes, intent_message):
          move_command = intent_message.slots.MOVE_COMMAND_SLOT.first().value
          socketIO.emit('move_command', move_command)
          lastcommand = 'move_command@'+ move_command
+         requests.get('http://localhost/sstore?lastcommand='+ lastcommand + '&sid=' + intent_message.session_id)
          hermes.publish_continue_session(intent_message.session_id, 'Moving ' + move_command + ', Would you like to do that again?', ['gunasekartr:continueintent']);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
@@ -58,6 +60,7 @@ def subscribe_intent_continue(hermes, intent_message):
      if len(intent_message.slots.YES_NO_SLOT) > 0:
          continue_answer = intent_message.slots.YES_NO_SLOT.first().value
          if continue_answer == 'yes':
+             lastcommand = requests.get('http://localhost/lastcommand/&sid=' + intent_message.session_id)
              print('lastcom:' + lastcommand)
              last_intent_command, action = lastcommand.split("@")
              socketIO.emit(last_intent_command, action)
