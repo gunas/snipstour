@@ -54,9 +54,10 @@ def subscribe_intent_movecommand(hermes, intent_message):
 
 def subscribe_intent_continue(hermes, intent_message):
      if len(intent_message.slots.YES_NO_SLOT) > 0:
-         continue_command = intent_message.slots.YES_NO_SLOT.first().value
+         continue_answer = intent_message.slots.YES_NO_SLOT.first().value
          if continue_answer == 'yes':
-             last_command, action = intent_message.custom_data.split("@")
+             print(intent_message.custom_data.split("@"))
+             last_command, action = str(intent_message.custom_data.split("@"))
              socketIO.emit(last_command, action)
              hermes.publish_continue_session(intent_message.session_id, 'Ok, Would you like to do the move again?', ['gunasekartr:continueintent'], intent_message.custom_data);
          else:
