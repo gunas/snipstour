@@ -60,7 +60,7 @@ def subscribe_intent_continue(hermes, intent_message):
      if len(intent_message.slots.YES_NO_SLOT) > 0:
          continue_answer = intent_message.slots.YES_NO_SLOT.first().value
          if continue_answer == 'yes':
-             lastcommand = requests.get('http://localhost/lastcommand/&sid=' + intent_message.session_id)
+             lastcommand = requests.get('http://localhost/lastcommand?sid=' + intent_message.session_id)
              print(lastcommand)
              print(lastcommand.raw)
              print('lastcom:' + lastcommand.text)
