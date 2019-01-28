@@ -40,7 +40,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
          socketIO.emit('rotation_command', turn_command)
-         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent'], str('rotation_command@LEFT'));
+         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent']);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
