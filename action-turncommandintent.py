@@ -40,7 +40,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
          socketIO.emit('rotation_command', turn_command)
-         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent'], 'rotation_command');
+         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent'], 'rotation_command@LEFT');
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
@@ -48,7 +48,7 @@ def subscribe_intent_movecommand(hermes, intent_message):
      if len(intent_message.slots.MOVE_COMMAND_SLOT) > 0:
          move_command = intent_message.slots.MOVE_COMMAND_SLOT.first().value
          socketIO.emit('move_command', move_command)
-         hermes.publish_continue_session(intent_message.session_id, 'Moving ' + move_command + '. Would you like to do that again?', ['gunasekartr:continueintent'], 'move_command@'+move_command);
+         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent'], 'move_command@LEFT');
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
