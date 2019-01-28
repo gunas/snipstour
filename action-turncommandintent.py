@@ -48,7 +48,7 @@ def subscribe_intent_movecommand(hermes, intent_message):
      if len(intent_message.slots.MOVE_COMMAND_SLOT) > 0:
          move_command = intent_message.slots.MOVE_COMMAND_SLOT.first().value
          socketIO.emit('move_command', move_command)
-         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent'], str('move_command@RIGHT'));
+         hermes.publish_continue_session(intent_message.session_id, 'Would you like to do that again?', ['gunasekartr:continueintent'], '{"customData": "move_command@RIGHT"}');
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
