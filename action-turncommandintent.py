@@ -37,31 +37,38 @@ def session_ended(hermes, session_ended_message):
     print('Ending session...')
  
 def subscribe_intent_turncommand(hermes, intent_message):
-     #conf = read_configuration_file('config.ini')
      if len(intent_message.slots.TURN_COMMAND_SLOT) > 0:
          turn_command = intent_message.slots.TURN_COMMAND_SLOT.first().value
          socketIO.emit('rotation_command', turn_command)
-         socketIO.emit('rotation_command', turn_command)
-         #socketIO.wait(seconds=1)
-         hermes.publish_end_session(intent_message.session_id, 'Turning ' + turn_command)
+         hermes.publish_continue_session(intent_message.session_id, 'Turning ' + turn_command + '. Would you like to do that again?', ['gunasekartr:continueintent'], 'rotation_command#'+turn_command);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
 def subscribe_intent_movecommand(hermes, intent_message):
-     #conf = read_configuration_file('config.ini')
      if len(intent_message.slots.MOVE_COMMAND_SLOT) > 0:
          move_command = intent_message.slots.MOVE_COMMAND_SLOT.first().value
          socketIO.emit('move_command', move_command)
-         socketIO.emit('move_command', move_command)
-         #socketIO.wait(seconds=1)
-         hermes.publish_end_session(intent_message.session_id, 'Moving ' + turn_command)
+         hermes.publish_continue_session(intent_message.session_id, 'Moving ' + move_command + '. Would you like to do that again?', ['gunasekartr:continueintent'], 'move_command#'+move_command);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
+
+def subscribe_intent_continue(hermes, intent_message):
+     if len(intent_message.slots.YES_NO_SLOT) > 0:
+         continue_command = intent_message.slots.YES_NO_SLOT.first().value
+         if continue_answer == 'yes':
+             last_command, action = intent_message.custom_data.split("#")
+             socketIO.emit(last_command, action)
+             hermes.publish_continue_session(intent_message.session_id, 'Would you like to do the move again?', ['gunasekartr:continueintent'], intent_message.custom_data);
+         else:
+             hermes.publish_end_session(intent_message.session_id, "That's fine");     
+     else:
+         hermes.publish_end_session(intent_message.session_id, "Would you like to do the move again?")
 
 if __name__ == "__main__":
     with Hermes('localhost:1883') as h:
         h.subscribe_intent('gunasekartr:turncommandintent', subscribe_intent_turncommand) \
             .subscribe_intent('gunasekartr:movecommandintent', subscribe_intent_movecommand) \
+            .subscribe_intent('gunasekartr:continueintent', subscribe_intent_continue) \
             .subscribe_session_ended(session_ended) \
             .subscribe_session_started(session_started) \
             .start()
