@@ -64,7 +64,7 @@ def subscribe_intent_continue(hermes, intent_message):
              print(lastcommand)
              print(lastcommand.raw)
              print('lastcom:' + lastcommand.text)
-             last_intent_command, action = lastcommand.split("@")
+             last_intent_command, action = lastcommand.text.split("@")
              socketIO.emit(last_intent_command, action)
              hermes.publish_continue_session(intent_message.session_id, 'Ok, Would you like to do the move again?', ['gunasekartr:continueintent']);
          else:
