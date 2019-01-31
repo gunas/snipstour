@@ -63,7 +63,11 @@ def subscribe_intent_continue(hermes, intent_message):
              lastcommand = requests.get('http://localhost/lastcommand?sid=' + intent_message.session_id)
              last_intent_command, action = lastcommand.text.split("@")
              socketIO.emit(last_intent_command, action)
-             hermes.publish_continue_session(intent_message.session_id, 'Would you like to continue'+turn_command+'?', ['gunasekartr:continueintent']);
+             if last_intent_command == 'move_command':
+                 result_message = 'Ok, Would you like to repeat moving '+ action +'?'
+             else:
+                 result_message = 'Ok, Would you like to repeat turning '+ action +'?'
+             hermes.publish_continue_session(intent_message.session_id, result_message, ['gunasekartr:continueintent', 'unasekartr:turncommandintent', 'gunasekartr:movecommandintent']);
          else:
              hermes.publish_end_session(intent_message.session_id, "That's fine.");     
      else:
