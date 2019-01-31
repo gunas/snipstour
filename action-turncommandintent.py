@@ -42,7 +42,7 @@ def subscribe_intent_turncommand(hermes, intent_message):
          socketIO.emit('rotation_command', turn_command)
          lastcommand = 'rotation_command@'+ turn_command
          requests.get('http://localhost/sstore?lastcommand='+ lastcommand + '&sid=' + intent_message.session_id)
-         hermes.publish_continue_session(intent_message.session_id, 'Ok, Would you like to repeat turning further?', ['gunasekartr:continueintent']);
+         hermes.publish_continue_session(intent_message.session_id, 'Ok, Would you like to repeat turning?', ['gunasekartr:continueintent']);
      else:
          hermes.publish_end_session(intent_message.session_id, "It doesn't work like that, try again please")
 
