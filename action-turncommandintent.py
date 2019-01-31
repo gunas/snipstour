@@ -67,7 +67,7 @@ def subscribe_intent_continue(hermes, intent_message):
                  result_message = 'Ok, Would you like to repeat moving '+ action +'?'
              else:
                  result_message = 'Ok, Would you like to repeat turning '+ action +'?'
-             hermes.publish_continue_session(intent_message.session_id, result_message, ['gunasekartr:continueintent', 'unasekartr:turncommandintent', 'gunasekartr:movecommandintent']);
+             hermes.publish_continue_session(intent_message.session_id, result_message, ['gunasekartr:continueintent', 'gunasekartr:turncommandintent', 'gunasekartr:movecommandintent']);
          else:
              hermes.publish_end_session(intent_message.session_id, "That's fine.");     
      else:
